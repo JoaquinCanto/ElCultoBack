@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+enum TipoPersona {
+    Administrador
+    Narrador
+    Jugador
+}
+
+model Persona {
+    idPersona       Int         @id @default(autoincrement())
+    nombre          String
+    apodo           String
+    fechaNacimiento DateTime
+    Email           String      @unique
+    tipo            TipoPersona
+
+    administrador Administrador?
+    narrador      Narrador?
+    jugador       Jugador?
+    Inscripto     Inscripto[]
+}
+
+model Administrador {
+    Administrador   Persona @relation(fields: [idAdministrador], references: [idPersona])
+    idAdministrador Int     @id
+    acceso          String
+}
+
+model Narrador {
+    Narrador   Persona @relation(fields: [idNarrador], references: [idPersona])
+    idNarrador Int     @id
+    acceso     String
+    Mesa       Mesa[]
+}
+
+model Jugador {
+    Jugador   Persona @relation(fields: [idJugador], references: [idPersona])
+    idJugador Int     @id
+    acceso    String
+}
+
+model Juego {
+    idJuego     Int    @id @default(autoincrement())
+    nombre      String @unique
+    descripcion String
+    Mesa        Mesa[]
+}
+
+model Lugar {
+    idLugar   Int    @id @default(autoincrement())
+    nombre    String @unique
+    direccion String
+    Mesa      Mesa[]
+}
+
+model Inscripto {
+    idInscripto Int      @id @default(autoincrement())
+    jugador     Persona  @relation(fields: [idjugador], references: [idPersona])
+    idjugador   Int
+    mesa        Mesa     @relation(fields: [idMesa], references: [idMesa])
+    idMesa      Int
+    inscriptoAt DateTime @default(now())
+    asistencia  Boolean?
+
+    @@unique([idMesa, idjugador]) // Evitar duplicados de la misma inscripción
+}
+
+model Mesa {
+    idMesa     Int         @id @default(autoincrement())
+    narrador   Narrador    @relation(fields: [idNarrador], references: [idNarrador])
+    idNarrador Int
+    juego      Juego       @relation(fields: [idJuego], references: [idJuego])
+    idJuego    Int
+    lugar      Lugar       @relation(fields: [idLugar], references: [idLugar])
+    idLugar    Int
+    fechaHora  DateTime
+    notas      String
+    cupoMin    Int
+    cupoMax    Int
+    jugadores  Inscripto[]
+    publica    Boolean
+    codigo     String?
+    createdAt  DateTime    @default(now())
+}
