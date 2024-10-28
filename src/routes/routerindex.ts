@@ -5,6 +5,7 @@ import personaRouter from "./persona";
 import adminRouter from "./administador";
 import narradorRouter from "./narrador";
 import jugadorController from "./jugador";
+import mesaController from "./mesa";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use('/persona', personaRouter);
 router.use('/admin', adminRouter);
 router.use('/narrador', narradorRouter);
 router.use('/jugador', jugadorController);
+router.use('/mesa', mesaController);
 
 export default router;
