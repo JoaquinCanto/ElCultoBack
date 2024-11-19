@@ -31,7 +31,7 @@ model Persona {
     administrador Administrador?
     narrador      Narrador?
     jugador       Jugador?
-    Inscripto     Inscripcion[]
+    Inscripcion   Inscripcion[]
 }
 
 model Administrador {
@@ -68,13 +68,13 @@ model Lugar {
 }
 
 model Inscripcion {
-    idInscripto Int      @id @default(autoincrement())
-    jugador     Persona  @relation(fields: [idjugador], references: [idPersona])
-    idjugador   Int
-    mesa        Mesa     @relation(fields: [idMesa], references: [idMesa])
-    idMesa      Int
-    inscriptoAt DateTime @default(now())
-    asistencia  Boolean?
+    idInscripcion Int      @id @default(autoincrement())
+    jugador       Persona  @relation(fields: [idjugador], references: [idPersona])
+    idjugador     Int
+    mesa          Mesa     @relation(fields: [idMesa], references: [idMesa])
+    idMesa        Int
+    inscriptoAt   DateTime @default(now())
+    asistencia    Boolean?
 
     @@unique([idMesa, idjugador]) // Evitar duplicados de la misma inscripción
 }
