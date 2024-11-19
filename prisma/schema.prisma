@@ -31,7 +31,7 @@ model Persona {
     administrador Administrador?
     narrador      Narrador?
     jugador       Jugador?
-    Inscripto     Inscripto[]
+    Inscripto     Inscripcion[]
 }
 
 model Administrador {
@@ -67,7 +67,7 @@ model Lugar {
     Mesa      Mesa[]
 }
 
-model Inscripto {
+model Inscripcion {
     idInscripto Int      @id @default(autoincrement())
     jugador     Persona  @relation(fields: [idjugador], references: [idPersona])
     idjugador   Int
@@ -80,19 +80,19 @@ model Inscripto {
 }
 
 model Mesa {
-    idMesa     Int         @id @default(autoincrement())
-    narrador   Narrador    @relation(fields: [idNarrador], references: [idNarrador])
+    idMesa     Int           @id @default(autoincrement())
+    narrador   Narrador      @relation(fields: [idNarrador], references: [idNarrador])
     idNarrador Int
-    juego      Juego       @relation(fields: [idJuego], references: [idJuego])
+    juego      Juego         @relation(fields: [idJuego], references: [idJuego])
     idJuego    Int
-    lugar      Lugar       @relation(fields: [idLugar], references: [idLugar])
+    lugar      Lugar         @relation(fields: [idLugar], references: [idLugar])
     idLugar    Int
     fechaHora  DateTime
     notas      String
     cupoMin    Int
     cupoMax    Int
-    jugadores  Inscripto[]
+    jugadores  Inscripcion[]
     publica    Boolean
     codigo     String?
-    createdAt  DateTime    @default(now())
+    createdAt  DateTime      @default(now())
 }
