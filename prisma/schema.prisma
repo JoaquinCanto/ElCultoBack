@@ -20,13 +20,23 @@ enum TipoPersona {
     Jugador
 }
 
+enum EstadoMesa {
+    Abierta
+    Cerrada
+    EnCurso
+    Finalizada
+    Cancelada
+}
+
 model Persona {
     idPersona       Int         @id @default(autoincrement())
     nombre          String
     apodo           String
-    fechaNacimiento DateTime
+    fechaNacimiento DateTime    @db.Date
     Email           String      @unique
     tipo            TipoPersona
+    estado          Boolean
+    banHasta        DateTime?
 
     administrador Administrador?
     narrador      Narrador?
@@ -92,6 +102,7 @@ model Mesa {
     cupoMin    Int
     cupoMax    Int
     jugadores  Inscripcion[]
+    estado     EstadoMesa
     publica    Boolean
     codigo     String?
     createdAt  DateTime      @default(now())

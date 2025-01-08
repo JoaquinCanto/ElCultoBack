@@ -1,15 +1,19 @@
 -- CreateEnum
 CREATE TYPE "TipoPersona" AS ENUM ('Administrador', 'Narrador', 'Jugador');
 
+-- CreateEnum
+CREATE TYPE "EstadoMesa" AS ENUM ('Abierta', 'Cerrada', 'EnCurso', 'Finalizada', 'Cancelada');
+
 -- CreateTable
 CREATE TABLE "Persona" (
     "idPersona" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
     "apodo" TEXT NOT NULL,
-    "fechaNacimiento" TIMESTAMP(3) NOT NULL,
+    "fechaNacimiento" DATE NOT NULL,
     "Email" TEXT NOT NULL,
     "tipo" "TipoPersona" NOT NULL,
-    "idMesa" INTEGER,
+    "estado" BOOLEAN NOT NULL,
+    "banHasta" TIMESTAMP(3),
 
     CONSTRAINT "Persona_pkey" PRIMARY KEY ("idPersona")
 );
@@ -57,6 +61,17 @@ CREATE TABLE "Lugar" (
 );
 
 -- CreateTable
+CREATE TABLE "Inscripcion" (
+    "idInscripcion" SERIAL NOT NULL,
+    "idjugador" INTEGER NOT NULL,
+    "idMesa" INTEGER NOT NULL,
+    "inscriptoAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "asistencia" BOOLEAN,
+
+    CONSTRAINT "Inscripcion_pkey" PRIMARY KEY ("idInscripcion")
+);
+
+-- CreateTable
 CREATE TABLE "Mesa" (
     "idMesa" SERIAL NOT NULL,
     "idNarrador" INTEGER NOT NULL,
@@ -66,6 +81,9 @@ CREATE TABLE "Mesa" (
     "notas" TEXT NOT NULL,
     "cupoMin" INTEGER NOT NULL,
     "cupoMax" INTEGER NOT NULL,
+    "estado" "EstadoMesa" NOT NULL,
+    "publica" BOOLEAN NOT NULL,
+    "codigo" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Mesa_pkey" PRIMARY KEY ("idMesa")
@@ -80,8 +98,8 @@ CREATE UNIQUE INDEX "Juego_nombre_key" ON "Juego"("nombre");
 -- CreateIndex
 CREATE UNIQUE INDEX "Lugar_nombre_key" ON "Lugar"("nombre");
 
--- AddForeignKey
-ALTER TABLE "Persona" ADD CONSTRAINT "Persona_idMesa_fkey" FOREIGN KEY ("idMesa") REFERENCES "Mesa"("idMesa") ON DELETE SET NULL ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Inscripcion_idMesa_idjugador_key" ON "Inscripcion"("idMesa", "idjugador");
 
 -- AddForeignKey
 ALTER TABLE "Administrador" ADD CONSTRAINT "Administrador_idAdministrador_fkey" FOREIGN KEY ("idAdministrador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -91,6 +109,12 @@ ALTER TABLE "Narrador" ADD CONSTRAINT "Narrador_idNarrador_fkey" FOREIGN KEY ("i
 
 -- AddForeignKey
 ALTER TABLE "Jugador" ADD CONSTRAINT "Jugador_idJugador_fkey" FOREIGN KEY ("idJugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idjugador_fkey" FOREIGN KEY ("idjugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idMesa_fkey" FOREIGN KEY ("idMesa") REFERENCES "Mesa"("idMesa") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idNarrador_fkey" FOREIGN KEY ("idNarrador") REFERENCES "Narrador"("idNarrador") ON DELETE RESTRICT ON UPDATE CASCADE;
