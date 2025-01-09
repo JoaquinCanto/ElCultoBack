@@ -7,11 +7,42 @@ const mesaController = {
 	// Obtener todos las mesas
 	getAll: async (_req: Request, res: Response) => {
 		try {
-			const allmesas: Mesa[] = await prisma.mesa.findMany();
+			const allmesas: Mesa[] = await prisma.mesa.findMany({
+				include: {
+					juego: true,
+					lugar: true,
+					narrador: true,
+				},
+			});
 			return res.status(200).json({
 				status: 200,
 				total: allmesas.length,
-				data: allmesas,
+				items: allmesas,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
+	getAllOpen: async (_req: Request, res: Response) => {
+		try {
+			const allOpenGames: Mesa[] = await prisma.mesa.findMany({
+				where: { estado: 'Abierta' },
+				include: {
+					juego: true,
+					lugar: true,
+					narrador: true,
+				},
+			});
+			return res.status(200).json({
+				status: 200,
+				total: allOpenGames.length,
+				items: allOpenGames,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +61,7 @@ const mesaController = {
 			const idMesa: Mesa | null = await prisma.mesa.findUnique({ where: { idMesa: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idMesa,
+				items: idMesa,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +84,7 @@ const mesaController = {
 			res.status(201).json({
 				message: 'Mesa creada exitosamente.',
 				status: 201,
-				data: newMesa,
+				items: newMesa,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +104,7 @@ const mesaController = {
 			const deleteMesa = await prisma.mesa.delete({ where: { idMesa: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deleteMesa,
+				items: deleteMesa,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +120,11 @@ const mesaController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updateMesa: Mesa = await prisma.mesa.update({ where: { idMesa: Number(id) }, data: data });
+			const items = _req.body;
+			const updateMesa: Mesa = await prisma.mesa.update({ where: { idMesa: Number(id) }, data: items });
 			return res.status(200).json({
 				status: 200,
-				data: updateMesa,
+				items: updateMesa,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

@@ -7,6 +7,9 @@ const mesaRouter = Router();
 //GET - http://localhost/mesa
 mesaRouter.get('/', mesaController.getAll);
 
+//GET - http://localhost/mesa/abierta
+mesaRouter.get('/abierta', mesaController.getAllOpen);
+
 //GET - http://localhost/mesa/:id
 mesaRouter.get('/:id', mesaController.getById);
 
