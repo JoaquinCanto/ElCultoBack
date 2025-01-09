@@ -11,7 +11,7 @@ const personaController = {
 			return res.status(200).json({
 				status: 200,
 				total: allpersonas.length,
-				data: allpersonas,
+				itmes: allpersonas,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const personaController = {
 			const idPersona: Persona | null = await prisma.persona.findUnique({ where: { idPersona: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idPersona,
+				itmes: idPersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const personaController = {
 			res.status(201).json({
 				message: 'Persona creada exitosamente.',
 				status: 201,
-				data: newPersona,
+				itmes: newPersona,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const personaController = {
 			const deletePersona = await prisma.persona.delete({ where: { idPersona: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deletePersona,
+				itmes: deletePersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const personaController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updatePersona: Persona = await prisma.persona.update({ where: { idPersona: Number(id) }, data: data });
+			const itmes = _req.body;
+			const updatePersona: Persona = await prisma.persona.update({ where: { idPersona: Number(id) }, data: itmes });
 			return res.status(200).json({
 				status: 200,
-				data: updatePersona,
+				itmes: updatePersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

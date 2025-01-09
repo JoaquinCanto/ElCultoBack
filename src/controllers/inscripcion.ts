@@ -11,7 +11,7 @@ const inscripcionController = {
 			return res.status(200).json({
 				status: 200,
 				total: allinscripciones.length,
-				data: allinscripciones,
+				itmes: allinscripciones,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const inscripcionController = {
 			const idInscripcion: Inscripcion | null = await prisma.inscripcion.findUnique({ where: { idInscripcion: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idInscripcion,
+				itmes: idInscripcion,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const inscripcionController = {
 			res.status(201).json({
 				message: 'Inscripcion creada exitosamente.',
 				status: 201,
-				data: newInscripcion,
+				itmes: newInscripcion,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const inscripcionController = {
 			const deleteInscripcion = await prisma.inscripcion.delete({ where: { idInscripcion: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deleteInscripcion,
+				itmes: deleteInscripcion,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const inscripcionController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updateInscripcion: Inscripcion = await prisma.inscripcion.update({ where: { idInscripcion: Number(id) }, data: data });
+			const itmes = _req.body;
+			const updateInscripcion: Inscripcion = await prisma.inscripcion.update({ where: { idInscripcion: Number(id) }, data: itmes });
 			return res.status(200).json({
 				status: 200,
-				data: updateInscripcion,
+				itmes: updateInscripcion,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

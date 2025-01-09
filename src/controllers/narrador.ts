@@ -11,7 +11,7 @@ const narradorController = {
 			return res.status(200).json({
 				status: 200,
 				total: allnarradores.length,
-				data: allnarradores,
+				items: allnarradores,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const narradorController = {
 			const idNarrador: Narrador | null = await prisma.narrador.findUnique({ where: { idNarrador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idNarrador,
+				items: idNarrador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const narradorController = {
 			res.status(201).json({
 				message: 'Narrador creado exitosamente.',
 				status: 201,
-				data: newNarrador,
+				items: newNarrador,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const narradorController = {
 			const deleteNarrador = await prisma.narrador.delete({ where: { idNarrador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deleteNarrador,
+				items: deleteNarrador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const narradorController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updateNarrador: Narrador = await prisma.narrador.update({ where: { idNarrador: Number(id) }, data: data });
+			const items = _req.body;
+			const updateNarrador: Narrador = await prisma.narrador.update({ where: { idNarrador: Number(id) }, data: items });
 			return res.status(200).json({
 				status: 200,
-				data: updateNarrador,
+				items: updateNarrador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

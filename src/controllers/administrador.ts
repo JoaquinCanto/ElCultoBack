@@ -11,7 +11,7 @@ const administradorController = {
 			return res.status(200).json({
 				status: 200,
 				total: alladmins.length,
-				data: alladmins,
+				itmes: alladmins,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const administradorController = {
 			const idAdministrador: Administrador | null = await prisma.administrador.findUnique({ where: { idAdministrador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idAdministrador,
+				itmes: idAdministrador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const administradorController = {
 			res.status(201).json({
 				message: 'Administrador creado exitosamente.',
 				status: 201,
-				data: newAdmin,
+				itmes: newAdmin,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const administradorController = {
 			const deleteAdmin = await prisma.administrador.delete({ where: { idAdministrador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deleteAdmin,
+				itmes: deleteAdmin,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const administradorController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updateAdmin: Administrador = await prisma.administrador.update({ where: { idAdministrador: Number(id) }, data: data });
+			const itmes = _req.body;
+			const updateAdmin: Administrador = await prisma.administrador.update({ where: { idAdministrador: Number(id) }, data: itmes });
 			return res.status(200).json({
 				status: 200,
-				data: updateAdmin,
+				itmes: updateAdmin,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

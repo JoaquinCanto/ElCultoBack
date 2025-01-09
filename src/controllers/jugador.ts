@@ -11,7 +11,7 @@ const jugadorController = {
 			return res.status(200).json({
 				status: 200,
 				total: alljugadores.length,
-				data: alljugadores,
+				itmes: alljugadores,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const jugadorController = {
 			const idJugador: Jugador | null = await prisma.jugador.findUnique({ where: { idJugador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: idJugador,
+				itmes: idJugador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const jugadorController = {
 			res.status(201).json({
 				message: 'Jugador creado exitosamente.',
 				status: 201,
-				data: newJugador,
+				itmes: newJugador,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const jugadorController = {
 			const deleteJugador = await prisma.jugador.delete({ where: { idJugador: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				data: deleteJugador,
+				itmes: deleteJugador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const jugadorController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const data = _req.body;
-			const updateJugador: Jugador = await prisma.jugador.update({ where: { idJugador: Number(id) }, data: data });
+			const itmes = _req.body;
+			const updateJugador: Jugador = await prisma.jugador.update({ where: { idJugador: Number(id) }, data: itmes });
 			return res.status(200).json({
 				status: 200,
-				data: updateJugador,
+				itmes: updateJugador,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
