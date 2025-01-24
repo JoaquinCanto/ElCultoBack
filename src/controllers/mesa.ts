@@ -12,6 +12,18 @@ const mesaController = {
 					juego: true,
 					lugar: true,
 					narrador: true,
+					jugadores: { // Incluye las inscripciones
+						include: {
+							jugador: { // Detalles del jugador inscrito
+								select: {
+									idPersona: true,
+									nombre: true,
+									apodo: true,
+									email: true,
+								},
+							},
+						},
+					},
 				},
 			});
 			return res.status(200).json({
@@ -37,6 +49,18 @@ const mesaController = {
 					juego: true,
 					lugar: true,
 					narrador: true,
+					jugadores: { // Incluye las inscripciones
+						include: {
+							jugador: { // Detalles del jugador inscrito
+								select: {
+									idPersona: true,
+									nombre: true,
+									apodo: true,
+									email: true,
+								},
+							},
+						},
+					},
 				},
 			});
 			return res.status(200).json({

@@ -11,7 +11,7 @@ const lugarController = {
 			return res.status(200).json({
 				status: 200,
 				total: allLugares.length,
-				itmes: allLugares,
+				items: allLugares,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,7 @@ const lugarController = {
 			const idLugar: Lugar | null = await prisma.lugar.findUnique({ where: { idLugar: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				itmes: idLugar,
+				items: idLugar,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +53,7 @@ const lugarController = {
 			res.status(201).json({
 				message: 'Lugar creado exitosamente.',
 				status: 201,
-				itmes: newLugar,
+				items: newLugar,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +73,7 @@ const lugarController = {
 			const deleteLugar = await prisma.lugar.delete({ where: { idLugar: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				itmes: deleteLugar,
+				items: deleteLugar,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +89,11 @@ const lugarController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const itmes = _req.body;
-			const updateLugar: Lugar = await prisma.lugar.update({ where: { idLugar: Number(id) }, data: itmes });
+			const items = _req.body;
+			const updateLugar: Lugar = await prisma.lugar.update({ where: { idLugar: Number(id) }, data: items });
 			return res.status(200).json({
 				status: 200,
-				itmes: updateLugar,
+				items: updateLugar,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
