@@ -11,7 +11,7 @@ const personaController = {
 			return res.status(200).json({
 				status: 200,
 				total: allpersonas.length,
-				itmes: allpersonas,
+				items: allpersonas,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -30,7 +30,26 @@ const personaController = {
 			const idPersona: Persona | null = await prisma.persona.findUnique({ where: { idPersona: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				itmes: idPersona,
+				items: idPersona,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
+	//Obtener una persona por email
+	getByEmail: async (_req: Request, res: Response) => {
+		try {
+			const email = _req.params.email
+			const emailPersona: Persona | null = await prisma.persona.findUnique({ where: { email: email } });
+			return res.status(200).json({
+				status: 200,
+				items: emailPersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -53,7 +72,7 @@ const personaController = {
 			res.status(201).json({
 				message: 'Persona creada exitosamente.',
 				status: 201,
-				itmes: newPersona,
+				items: newPersona,
 				error: false,
 			});
 		} catch (error) {
@@ -73,7 +92,7 @@ const personaController = {
 			const deletePersona = await prisma.persona.delete({ where: { idPersona: Number(id) } });
 			return res.status(200).json({
 				status: 200,
-				itmes: deletePersona,
+				items: deletePersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {
@@ -89,11 +108,11 @@ const personaController = {
 	update: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const itmes = _req.body;
-			const updatePersona: Persona = await prisma.persona.update({ where: { idPersona: Number(id) }, data: itmes });
+			const items = _req.body;
+			const updatePersona: Persona = await prisma.persona.update({ where: { idPersona: Number(id) }, data: items });
 			return res.status(200).json({
 				status: 200,
-				itmes: updatePersona,
+				items: updatePersona,
 			});
 		} catch (error) {
 			if (error instanceof Error) {

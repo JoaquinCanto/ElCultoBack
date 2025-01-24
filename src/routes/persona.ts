@@ -10,6 +10,9 @@ personaRouter.get('/', personaController.getAll);
 //GET - http://localhost/persona/:id
 personaRouter.get('/:id', personaController.getById);
 
+//GET - http://localhost/persona/email/:email
+personaRouter.get('/email/:email', personaController.getByEmail);
+
 //POST - http://localhost/persona
 personaRouter.post('/', personaController.create);
 
