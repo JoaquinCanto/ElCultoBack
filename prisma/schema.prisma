@@ -33,35 +33,36 @@ model Persona {
     nombre          String
     apodo           String
     fechaNacimiento DateTime    @db.Date
-    Email           String      @unique
+    email           String      @unique
     tipo            TipoPersona
     estado          Boolean
     banHasta        DateTime?
 
-    administrador Administrador?
-    narrador      Narrador?
-    jugador       Jugador?
-    Inscripcion   Inscripcion[]
+    // administrador Administrador?
+    // narrador      Narrador?
+    // jugador       Jugador?
+    Inscripcion Inscripcion[]
+    Mesa        Mesa[]
 }
 
-model Administrador {
-    Administrador   Persona @relation(fields: [idAdministrador], references: [idPersona])
-    idAdministrador Int     @id
-    acceso          String
-}
+// model Administrador {
+//     Administrador   Persona @relation(fields: [idAdministrador], references: [idPersona])
+//     idAdministrador Int     @id
+//     acceso          String
+// }
 
-model Narrador {
-    Narrador   Persona @relation(fields: [idNarrador], references: [idPersona])
-    idNarrador Int     @id
-    acceso     String
-    Mesa       Mesa[]
-}
+// model Narrador {
+//     Narrador   Persona @relation(fields: [idNarrador], references: [idPersona])
+//     idNarrador Int     @id
+//     acceso     String
+//     Mesa       Mesa[]
+// }
 
-model Jugador {
-    Jugador   Persona @relation(fields: [idJugador], references: [idPersona])
-    idJugador Int     @id
-    acceso    String
-}
+// model Jugador {
+//     Jugador   Persona @relation(fields: [idJugador], references: [idPersona])
+//     idJugador Int     @id
+//     acceso    String
+// }
 
 model Juego {
     idJuego     Int    @id @default(autoincrement())
@@ -91,7 +92,9 @@ model Inscripcion {
 
 model Mesa {
     idMesa     Int           @id @default(autoincrement())
-    narrador   Narrador      @relation(fields: [idNarrador], references: [idNarrador])
+    // narrador   Narrador      @relation(fields: [idNarrador], references: [idNarrador])
+    // idNarrador Int
+    narrador   Persona       @relation(fields: [idNarrador], references: [idPersona])
     idNarrador Int
     juego      Juego         @relation(fields: [idJuego], references: [idJuego])
     idJuego    Int
@@ -101,7 +104,8 @@ model Mesa {
     notas      String
     cupoMin    Int
     cupoMax    Int
-    jugadores  Inscripcion[]
+    jugadores  Inscripcion[] //@relation(fields: [idJugadores], references: [idInscripcion])
+    // idJugadores Int?
     estado     EstadoMesa
     publica    Boolean
     codigo     String?

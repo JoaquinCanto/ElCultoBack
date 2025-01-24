@@ -19,30 +19,6 @@ CREATE TABLE "Persona" (
 );
 
 -- CreateTable
-CREATE TABLE "Administrador" (
-    "idAdministrador" INTEGER NOT NULL,
-    "acceso" TEXT NOT NULL,
-
-    CONSTRAINT "Administrador_pkey" PRIMARY KEY ("idAdministrador")
-);
-
--- CreateTable
-CREATE TABLE "Narrador" (
-    "idNarrador" INTEGER NOT NULL,
-    "acceso" TEXT NOT NULL,
-
-    CONSTRAINT "Narrador_pkey" PRIMARY KEY ("idNarrador")
-);
-
--- CreateTable
-CREATE TABLE "Jugador" (
-    "idJugador" INTEGER NOT NULL,
-    "acceso" TEXT NOT NULL,
-
-    CONSTRAINT "Jugador_pkey" PRIMARY KEY ("idJugador")
-);
-
--- CreateTable
 CREATE TABLE "Juego" (
     "idJuego" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
@@ -74,13 +50,14 @@ CREATE TABLE "Inscripcion" (
 -- CreateTable
 CREATE TABLE "Mesa" (
     "idMesa" SERIAL NOT NULL,
-    "idNarrador" INTEGER NOT NULL,
+    "idPersona" INTEGER NOT NULL,
     "idJuego" INTEGER NOT NULL,
     "idLugar" INTEGER NOT NULL,
     "fechaHora" TIMESTAMP(3) NOT NULL,
     "notas" TEXT NOT NULL,
     "cupoMin" INTEGER NOT NULL,
     "cupoMax" INTEGER NOT NULL,
+    "idJugadores" INTEGER NOT NULL,
     "estado" "EstadoMesa" NOT NULL,
     "publica" BOOLEAN NOT NULL,
     "codigo" TEXT,
@@ -102,25 +79,16 @@ CREATE UNIQUE INDEX "Lugar_nombre_key" ON "Lugar"("nombre");
 CREATE UNIQUE INDEX "Inscripcion_idMesa_idjugador_key" ON "Inscripcion"("idMesa", "idjugador");
 
 -- AddForeignKey
-ALTER TABLE "Administrador" ADD CONSTRAINT "Administrador_idAdministrador_fkey" FOREIGN KEY ("idAdministrador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Narrador" ADD CONSTRAINT "Narrador_idNarrador_fkey" FOREIGN KEY ("idNarrador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Jugador" ADD CONSTRAINT "Jugador_idJugador_fkey" FOREIGN KEY ("idJugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idjugador_fkey" FOREIGN KEY ("idjugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idMesa_fkey" FOREIGN KEY ("idMesa") REFERENCES "Mesa"("idMesa") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idNarrador_fkey" FOREIGN KEY ("idNarrador") REFERENCES "Narrador"("idNarrador") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idPersona_fkey" FOREIGN KEY ("idPersona") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idJuego_fkey" FOREIGN KEY ("idJuego") REFERENCES "Juego"("idJuego") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idLugar_fkey" FOREIGN KEY ("idLugar") REFERENCES "Lugar"("idLugar") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idJugadores_fkey" FOREIGN KEY ("idJugadores") REFERENCES "Inscripcion"("idInscripcion") ON DELETE RESTRICT ON UPDATE CASCADE;
