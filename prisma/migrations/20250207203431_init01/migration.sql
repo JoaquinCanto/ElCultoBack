@@ -10,10 +10,12 @@ CREATE TABLE "Persona" (
     "nombre" TEXT NOT NULL,
     "apodo" TEXT NOT NULL,
     "fechaNacimiento" DATE NOT NULL,
-    "Email" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "tipo" "TipoPersona" NOT NULL,
-    "estado" BOOLEAN NOT NULL,
-    "banHasta" TIMESTAMP(3),
+    "quiereNarrar" BOOLEAN NOT NULL,
+    "habilitado" BOOLEAN NOT NULL,
+    "desabilitadoHasta" TIMESTAMP(3),
+    "borrado" BOOLEAN NOT NULL,
 
     CONSTRAINT "Persona_pkey" PRIMARY KEY ("idPersona")
 );
@@ -23,6 +25,7 @@ CREATE TABLE "Juego" (
     "idJuego" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
     "descripcion" TEXT NOT NULL,
+    "borrado" BOOLEAN NOT NULL,
 
     CONSTRAINT "Juego_pkey" PRIMARY KEY ("idJuego")
 );
@@ -32,6 +35,7 @@ CREATE TABLE "Lugar" (
     "idLugar" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
     "direccion" TEXT NOT NULL,
+    "borrado" BOOLEAN NOT NULL,
 
     CONSTRAINT "Lugar_pkey" PRIMARY KEY ("idLugar")
 );
@@ -39,10 +43,11 @@ CREATE TABLE "Lugar" (
 -- CreateTable
 CREATE TABLE "Inscripcion" (
     "idInscripcion" SERIAL NOT NULL,
-    "idjugador" INTEGER NOT NULL,
+    "idJugador" INTEGER NOT NULL,
     "idMesa" INTEGER NOT NULL,
-    "inscriptoAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "fechaInscripcion" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "asistencia" BOOLEAN,
+    "borrado" BOOLEAN NOT NULL,
 
     CONSTRAINT "Inscripcion_pkey" PRIMARY KEY ("idInscripcion")
 );
@@ -50,24 +55,23 @@ CREATE TABLE "Inscripcion" (
 -- CreateTable
 CREATE TABLE "Mesa" (
     "idMesa" SERIAL NOT NULL,
-    "idPersona" INTEGER NOT NULL,
+    "idNarrador" INTEGER NOT NULL,
     "idJuego" INTEGER NOT NULL,
     "idLugar" INTEGER NOT NULL,
     "fechaHora" TIMESTAMP(3) NOT NULL,
     "notas" TEXT NOT NULL,
     "cupoMin" INTEGER NOT NULL,
     "cupoMax" INTEGER NOT NULL,
-    "idJugadores" INTEGER NOT NULL,
     "estado" "EstadoMesa" NOT NULL,
     "publica" BOOLEAN NOT NULL,
     "codigo" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "fechaCreacion" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Mesa_pkey" PRIMARY KEY ("idMesa")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Persona_Email_key" ON "Persona"("Email");
+CREATE UNIQUE INDEX "Persona_email_key" ON "Persona"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Juego_nombre_key" ON "Juego"("nombre");
@@ -76,19 +80,19 @@ CREATE UNIQUE INDEX "Juego_nombre_key" ON "Juego"("nombre");
 CREATE UNIQUE INDEX "Lugar_nombre_key" ON "Lugar"("nombre");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Inscripcion_idMesa_idjugador_key" ON "Inscripcion"("idMesa", "idjugador");
+CREATE UNIQUE INDEX "Inscripcion_idMesa_idJugador_key" ON "Inscripcion"("idMesa", "idJugador");
 
 -- AddForeignKey
-ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idjugador_fkey" FOREIGN KEY ("idjugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idJugador_fkey" FOREIGN KEY ("idJugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idPersona_fkey" FOREIGN KEY ("idPersona") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idMesa_fkey" FOREIGN KEY ("idMesa") REFERENCES "Mesa"("idMesa") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idNarrador_fkey" FOREIGN KEY ("idNarrador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idJuego_fkey" FOREIGN KEY ("idJuego") REFERENCES "Juego"("idJuego") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idLugar_fkey" FOREIGN KEY ("idLugar") REFERENCES "Lugar"("idLugar") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Mesa" ADD CONSTRAINT "Mesa_idJugadores_fkey" FOREIGN KEY ("idJugadores") REFERENCES "Inscripcion"("idInscripcion") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -29,14 +29,16 @@ enum EstadoMesa {
 }
 
 model Persona {
-    idPersona       Int         @id @default(autoincrement())
-    nombre          String
-    apodo           String
-    fechaNacimiento DateTime    @db.Date
-    email           String      @unique
-    tipo            TipoPersona
-    estado          Boolean
-    banHasta        DateTime?
+    idPersona         Int         @id @default(autoincrement())
+    nombre            String
+    apodo             String
+    fechaNacimiento   DateTime    @db.Date
+    email             String      @unique
+    tipo              TipoPersona
+    quiereNarrar      Boolean
+    habilitado        Boolean
+    desabilitadoHasta DateTime?
+    borrado           Boolean
 
     // administrador Administrador?
     // narrador      Narrador?
@@ -65,49 +67,49 @@ model Persona {
 // }
 
 model Juego {
-    idJuego     Int    @id @default(autoincrement())
-    nombre      String @unique
+    idJuego     Int     @id @default(autoincrement())
+    nombre      String  @unique
     descripcion String
+    borrado     Boolean
     Mesa        Mesa[]
 }
 
 model Lugar {
-    idLugar   Int    @id @default(autoincrement())
-    nombre    String @unique
+    idLugar   Int     @id @default(autoincrement())
+    nombre    String  @unique
     direccion String
+    borrado   Boolean
     Mesa      Mesa[]
 }
 
 model Inscripcion {
-    idInscripcion Int      @id @default(autoincrement())
-    jugador       Persona  @relation(fields: [idjugador], references: [idPersona])
-    idjugador     Int
-    mesa          Mesa     @relation(fields: [idMesa], references: [idMesa])
-    idMesa        Int
-    inscriptoAt   DateTime @default(now())
-    asistencia    Boolean?
+    idInscripcion    Int      @id @default(autoincrement())
+    jugador          Persona  @relation(fields: [idJugador], references: [idPersona])
+    idJugador        Int
+    mesa             Mesa     @relation(fields: [idMesa], references: [idMesa])
+    idMesa           Int
+    fechaInscripcion DateTime @default(now())
+    asistencia       Boolean?
+    borrado          Boolean
 
-    @@unique([idMesa, idjugador]) // Evitar duplicados de la misma inscripción
+    @@unique([idMesa, idJugador]) // Evitar duplicados de la misma inscripción
 }
 
 model Mesa {
-    idMesa     Int           @id @default(autoincrement())
-    // narrador   Narrador      @relation(fields: [idNarrador], references: [idNarrador])
-    // idNarrador Int
-    narrador   Persona       @relation(fields: [idNarrador], references: [idPersona])
-    idNarrador Int
-    juego      Juego         @relation(fields: [idJuego], references: [idJuego])
-    idJuego    Int
-    lugar      Lugar         @relation(fields: [idLugar], references: [idLugar])
-    idLugar    Int
-    fechaHora  DateTime
-    notas      String
-    cupoMin    Int
-    cupoMax    Int
-    jugadores  Inscripcion[] //@relation(fields: [idJugadores], references: [idInscripcion])
-    // idJugadores Int?
-    estado     EstadoMesa
-    publica    Boolean
-    codigo     String?
-    createdAt  DateTime      @default(now())
+    idMesa        Int           @id @default(autoincrement())
+    narrador      Persona       @relation(fields: [idNarrador], references: [idPersona])
+    idNarrador    Int
+    juego         Juego         @relation(fields: [idJuego], references: [idJuego])
+    idJuego       Int
+    lugar         Lugar         @relation(fields: [idLugar], references: [idLugar])
+    idLugar       Int
+    fechaHora     DateTime
+    notas         String
+    cupoMin       Int
+    cupoMax       Int
+    jugadores     Inscripcion[]
+    estado        EstadoMesa
+    publica       Boolean
+    codigo        String?
+    fechaCreacion DateTime      @default(now())
 }
