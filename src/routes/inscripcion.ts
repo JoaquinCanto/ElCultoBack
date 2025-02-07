@@ -10,6 +10,9 @@ inscripcionRouter.get('/', inscripcionController.getAll);
 //GET - http://localhost/inscripcion/:id
 inscripcionRouter.get('/:id', inscripcionController.getById);
 
+//GET - http://localhost/inscripcion/jugador/:id
+inscripcionRouter.get('/jugador/:id', inscripcionController.getAllPlayerByPlayerId);
+
 //POST - http://localhost/inscripcion
 inscripcionRouter.post('/', inscripcionController.create);
 

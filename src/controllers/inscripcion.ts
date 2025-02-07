@@ -42,6 +42,50 @@ const inscripcionController = {
 		}
 	},
 
+	//Obtener todas las inscripciones habilitadas de un solo jugador por su id
+	getAllPlayerByPlayerId: async (_req: Request, res: Response) => {
+		try {
+			const id = parseInt(_req.params.id);
+			const inscripciones: Inscripcion[] | null = await prisma.inscripcion.findMany({
+				where: { idJugador: Number(id), borrado: false },
+				include: {
+					mesa: {
+						include: {
+							juego: {
+								select: {
+									nombre: true,
+								},
+							},
+							narrador: {
+								select: {
+									apodo: true,
+								},
+							},
+							lugar: {
+								select: {
+									nombre: true,
+									direccion: true
+								}
+							}
+						},
+					},
+				},
+			}
+			)
+			return res.status(200).json({
+				status: 200,
+				items: inscripciones,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Crear una inscripcion
 	create: async (req: Request, res: Response) => {
 		try {
