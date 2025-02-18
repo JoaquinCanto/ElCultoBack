@@ -41,6 +41,7 @@ const mesaController = {
 		}
 	},
 
+	// Obtener todas las mesas abiertas
 	getAllOpen: async (_req: Request, res: Response) => {
 		try {
 			const allOpenGames: Mesa[] = await prisma.mesa.findMany({
@@ -50,6 +51,9 @@ const mesaController = {
 					lugar: true,
 					narrador: true,
 					jugadores: { // Incluye las inscripciones
+						where: {
+							baja: false
+						},
 						include: {
 							jugador: { // Detalles del jugador inscrito
 								select: {
@@ -78,11 +82,75 @@ const mesaController = {
 		}
 	},
 
+	//Obtener todas las mesas narradas por un narrador por su id
+	getAllNarratedByNarratorId: async (_req: Request, res: Response) => {
+		try {
+			const idNarrador = parseInt(_req.params.id);
+			const mesasNarradas: Mesa[] | null = await prisma.mesa.findMany({
+				where: { idNarrador: Number(idNarrador) },
+				include: {
+					juego: true,
+					lugar: true,
+					narrador: true,
+					jugadores: { // Incluye las inscripciones
+						where: {
+							baja: false
+						},
+						include: {
+							jugador: { // Detalles del jugador inscrito
+								select: {
+									idPersona: true,
+									nombre: true,
+									apodo: true,
+									email: true,
+								},
+							},
+						},
+					},
+				},
+			});
+			return res.status(200).json({
+				status: 200,
+				total: mesasNarradas.length,
+				items: mesasNarradas,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Obtener una mesa por id
 	getById: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const idMesa: Mesa | null = await prisma.mesa.findUnique({ where: { idMesa: Number(id) } });
+			const idMesa: Mesa | null = await prisma.mesa.findUnique({
+				where: { idMesa: Number(id) },
+				include: {
+					juego: { select: { nombre: true, descripcion: true } },
+					lugar: { select: { nombre: true, direccion: true } },
+					narrador: { select: { apodo: true } },
+					jugadores: { // Incluye las inscripciones
+						where: {
+							baja: false
+						},
+						include: {
+							jugador: { // Detalles del jugador inscrito
+								select: {
+									idPersona: true,
+									nombre: true,
+									apodo: true,
+									email: true,
+								},
+							},
+						},
+					},
+				},
+			});
 			return res.status(200).json({
 				status: 200,
 				items: idMesa,

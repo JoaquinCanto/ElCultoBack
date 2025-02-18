@@ -10,6 +10,9 @@ mesaRouter.get('/', mesaController.getAll);
 //GET - http://localhost/mesa/abierta
 mesaRouter.get('/abierta', mesaController.getAllOpen);
 
+//GET - http://localhost/mesa/narrador/:id
+mesaRouter.get('/narrador/:id', mesaController.getAllNarratedByNarratorId);
+
 //GET - http://localhost/mesa/:id
 mesaRouter.get('/:id', mesaController.getById);
 
