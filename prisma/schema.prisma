@@ -38,39 +38,21 @@ model Persona {
     quiereNarrar      Boolean
     habilitado        Boolean
     desabilitadoHasta DateTime?
-    borrado           Boolean
+    fechaAlta         DateTime    @default(now())
+    baja              Boolean
+    fechaBaja         DateTime?
 
-    // administrador Administrador?
-    // narrador      Narrador?
-    // jugador       Jugador?
+    Sugerencia  Sugerencia[]
     Inscripcion Inscripcion[]
     Mesa        Mesa[]
 }
 
-// model Administrador {
-//     Administrador   Persona @relation(fields: [idAdministrador], references: [idPersona])
-//     idAdministrador Int     @id
-//     acceso          String
-// }
-
-// model Narrador {
-//     Narrador   Persona @relation(fields: [idNarrador], references: [idPersona])
-//     idNarrador Int     @id
-//     acceso     String
-//     Mesa       Mesa[]
-// }
-
-// model Jugador {
-//     Jugador   Persona @relation(fields: [idJugador], references: [idPersona])
-//     idJugador Int     @id
-//     acceso    String
-// }
-
 model Juego {
-    idJuego     Int     @id @default(autoincrement())
-    nombre      String  @unique
+    idJuego     Int          @id @default(autoincrement())
+    nombre      String       @unique
     descripcion String
     borrado     Boolean
+    Sugerencia  Sugerencia[]
     Mesa        Mesa[]
 }
 
@@ -82,6 +64,15 @@ model Lugar {
     Mesa      Mesa[]
 }
 
+model Sugerencia {
+    idSugerencia    Int      @id @default(autoincrement())
+    jugador         Persona  @relation(fields: [idJugador], references: [idPersona])
+    idJugador       Int
+    juego           Juego    @relation(fields: [idJuego], references: [idJuego])
+    idJuego         Int
+    fechaSugerencia DateTime @default(now())
+}
+
 model Inscripcion {
     idInscripcion    Int      @id @default(autoincrement())
     jugador          Persona  @relation(fields: [idJugador], references: [idPersona])
@@ -90,9 +81,7 @@ model Inscripcion {
     idMesa           Int
     fechaInscripcion DateTime @default(now())
     asistencia       Boolean?
-    borrado          Boolean
-
-    @@unique([idMesa, idJugador]) // Evitar duplicados de la misma inscripción
+    baja             Boolean
 }
 
 model Mesa {
