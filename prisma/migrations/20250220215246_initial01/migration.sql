@@ -2,6 +2,9 @@
 CREATE TYPE "TipoPersona" AS ENUM ('Administrador', 'Narrador', 'Jugador');
 
 -- CreateEnum
+CREATE TYPE "EstadoPersona" AS ENUM ('Habilitada', 'Desabilitada', 'DeBaja');
+
+-- CreateEnum
 CREATE TYPE "EstadoMesa" AS ENUM ('Abierta', 'Cerrada', 'EnCurso', 'Finalizada', 'Cancelada');
 
 -- CreateTable
@@ -12,10 +15,11 @@ CREATE TABLE "Persona" (
     "fechaNacimiento" DATE NOT NULL,
     "email" TEXT NOT NULL,
     "tipo" "TipoPersona" NOT NULL,
+    "estado" "EstadoPersona" NOT NULL,
     "quiereNarrar" BOOLEAN NOT NULL,
-    "habilitado" BOOLEAN NOT NULL,
+    "fechaAlta" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "desabilitadoHasta" TIMESTAMP(3),
-    "borrado" BOOLEAN NOT NULL,
+    "fechaBaja" TIMESTAMP(3),
 
     CONSTRAINT "Persona_pkey" PRIMARY KEY ("idPersona")
 );
@@ -23,9 +27,11 @@ CREATE TABLE "Persona" (
 -- CreateTable
 CREATE TABLE "Juego" (
     "idJuego" SERIAL NOT NULL,
+    "agregado" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "nombre" TEXT NOT NULL,
     "descripcion" TEXT NOT NULL,
-    "borrado" BOOLEAN NOT NULL,
+    "estado" BOOLEAN NOT NULL,
+    "fechaBaja" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Juego_pkey" PRIMARY KEY ("idJuego")
 );
@@ -33,11 +39,24 @@ CREATE TABLE "Juego" (
 -- CreateTable
 CREATE TABLE "Lugar" (
     "idLugar" SERIAL NOT NULL,
+    "agregado" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "nombre" TEXT NOT NULL,
     "direccion" TEXT NOT NULL,
-    "borrado" BOOLEAN NOT NULL,
+    "estado" BOOLEAN NOT NULL,
+    "fechaBaja" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Lugar_pkey" PRIMARY KEY ("idLugar")
+);
+
+-- CreateTable
+CREATE TABLE "Sugerencia" (
+    "idSugerencia" SERIAL NOT NULL,
+    "idPersona" INTEGER NOT NULL,
+    "idJuego" INTEGER NOT NULL,
+    "fechaSugerencia" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "vieja" BOOLEAN NOT NULL,
+
+    CONSTRAINT "Sugerencia_pkey" PRIMARY KEY ("idSugerencia")
 );
 
 -- CreateTable
@@ -47,7 +66,7 @@ CREATE TABLE "Inscripcion" (
     "idMesa" INTEGER NOT NULL,
     "fechaInscripcion" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "asistencia" BOOLEAN,
-    "borrado" BOOLEAN NOT NULL,
+    "baja" BOOLEAN NOT NULL,
 
     CONSTRAINT "Inscripcion_pkey" PRIMARY KEY ("idInscripcion")
 );
@@ -79,8 +98,11 @@ CREATE UNIQUE INDEX "Juego_nombre_key" ON "Juego"("nombre");
 -- CreateIndex
 CREATE UNIQUE INDEX "Lugar_nombre_key" ON "Lugar"("nombre");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Inscripcion_idMesa_idJugador_key" ON "Inscripcion"("idMesa", "idJugador");
+-- AddForeignKey
+ALTER TABLE "Sugerencia" ADD CONSTRAINT "Sugerencia_idPersona_fkey" FOREIGN KEY ("idPersona") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Sugerencia" ADD CONSTRAINT "Sugerencia_idJuego_fkey" FOREIGN KEY ("idJuego") REFERENCES "Juego"("idJuego") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Inscripcion" ADD CONSTRAINT "Inscripcion_idJugador_fkey" FOREIGN KEY ("idJugador") REFERENCES "Persona"("idPersona") ON DELETE RESTRICT ON UPDATE CASCADE;
