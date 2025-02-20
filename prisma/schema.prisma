@@ -20,6 +20,12 @@ enum TipoPersona {
     Jugador
 }
 
+enum EstadoPersona {
+    Habilitada
+    Desabilitada
+    DeBaja
+}
+
 enum EstadoMesa {
     Abierta
     Cerrada
@@ -29,17 +35,16 @@ enum EstadoMesa {
 }
 
 model Persona {
-    idPersona         Int         @id @default(autoincrement())
+    idPersona         Int           @id @default(autoincrement())
     nombre            String
     apodo             String
-    fechaNacimiento   DateTime    @db.Date
-    email             String      @unique
+    fechaNacimiento   DateTime      @db.Date
+    email             String        @unique
     tipo              TipoPersona
+    estado            EstadoPersona
     quiereNarrar      Boolean
-    habilitado        Boolean
+    fechaAlta         DateTime      @default(now())
     desabilitadoHasta DateTime?
-    fechaAlta         DateTime    @default(now())
-    baja              Boolean
     fechaBaja         DateTime?
 
     Sugerencia  Sugerencia[]
@@ -49,28 +54,33 @@ model Persona {
 
 model Juego {
     idJuego     Int          @id @default(autoincrement())
+    agregado    DateTime     @default(now())
     nombre      String       @unique
     descripcion String
-    borrado     Boolean
+    estado      Boolean
+    fechaBaja   DateTime
     Sugerencia  Sugerencia[]
     Mesa        Mesa[]
 }
 
 model Lugar {
-    idLugar   Int     @id @default(autoincrement())
-    nombre    String  @unique
+    idLugar   Int      @id @default(autoincrement())
+    agregado  DateTime @default(now())
+    nombre    String   @unique
     direccion String
-    borrado   Boolean
+    estado    Boolean
+    fechaBaja DateTime
     Mesa      Mesa[]
 }
 
 model Sugerencia {
     idSugerencia    Int      @id @default(autoincrement())
-    jugador         Persona  @relation(fields: [idJugador], references: [idPersona])
-    idJugador       Int
+    persona         Persona  @relation(fields: [idPersona], references: [idPersona])
+    idPersona       Int
     juego           Juego    @relation(fields: [idJuego], references: [idJuego])
     idJuego         Int
     fechaSugerencia DateTime @default(now())
+    vieja           Boolean
 }
 
 model Inscripcion {
