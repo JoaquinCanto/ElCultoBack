@@ -58,18 +58,18 @@ model Juego {
     nombre      String       @unique
     descripcion String
     estado      Boolean
-    fechaBaja   DateTime
+    fechaBaja   DateTime?
     Sugerencia  Sugerencia[]
     Mesa        Mesa[]
 }
 
 model Lugar {
-    idLugar   Int      @id @default(autoincrement())
-    agregado  DateTime @default(now())
-    nombre    String   @unique
+    idLugar   Int       @id @default(autoincrement())
+    agregado  DateTime  @default(now())
+    nombre    String    @unique
     direccion String
     estado    Boolean
-    fechaBaja DateTime
+    fechaBaja DateTime?
     Mesa      Mesa[]
 }
 
