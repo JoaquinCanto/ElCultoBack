@@ -21,8 +21,8 @@ enum TipoPersona {
 }
 
 enum EstadoPersona {
-    Habilitada
-    Desabilitada
+    Habilitado
+    Desabilitado
     DeBaja
 }
 
