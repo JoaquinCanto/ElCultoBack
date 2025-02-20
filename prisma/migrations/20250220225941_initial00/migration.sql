@@ -2,7 +2,7 @@
 CREATE TYPE "TipoPersona" AS ENUM ('Administrador', 'Narrador', 'Jugador');
 
 -- CreateEnum
-CREATE TYPE "EstadoPersona" AS ENUM ('Habilitado', 'Desabilitado', 'DeBaja');
+CREATE TYPE "EstadoPersona" AS ENUM ('Habilitado', 'Inhabilitado', 'DeBaja');
 
 -- CreateEnum
 CREATE TYPE "EstadoMesa" AS ENUM ('Abierta', 'Cerrada', 'EnCurso', 'Finalizada', 'Cancelada');
@@ -18,7 +18,7 @@ CREATE TABLE "Persona" (
     "estado" "EstadoPersona" NOT NULL,
     "quiereNarrar" BOOLEAN NOT NULL,
     "fechaAlta" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "desabilitadoHasta" TIMESTAMP(3),
+    "inhabilitadoHasta" TIMESTAMP(3),
     "fechaBaja" TIMESTAMP(3),
 
     CONSTRAINT "Persona_pkey" PRIMARY KEY ("idPersona")
