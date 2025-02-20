@@ -22,7 +22,7 @@ enum TipoPersona {
 
 enum EstadoPersona {
     Habilitado
-    Desabilitado
+    Inhabilitado
     DeBaja
 }
 
@@ -44,7 +44,7 @@ model Persona {
     estado            EstadoPersona
     quiereNarrar      Boolean
     fechaAlta         DateTime      @default(now())
-    desabilitadoHasta DateTime?
+    inhabilitadoHasta DateTime?
     fechaBaja         DateTime?
 
     Sugerencia  Sugerencia[]
