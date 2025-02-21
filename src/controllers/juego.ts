@@ -23,6 +23,29 @@ const juegoController = {
 		}
 	},
 
+	// Obtener todos los juegos habilitados
+	getAllowed: async (_req: Request, res: Response) => {
+		try {
+			const juegosHabilitados: Juego[] = await prisma.juego.findMany({
+				where: {
+					estado: true
+				}
+			});
+			return res.status(200).json({
+				status: 200,
+				total: juegosHabilitados.length,
+				items: juegosHabilitados,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Obtener un juego por id
 	getById: async (_req: Request, res: Response) => {
 		try {

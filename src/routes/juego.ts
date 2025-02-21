@@ -7,6 +7,9 @@ const juegoRouter = Router();
 //GET - http://localhost/juego
 juegoRouter.get('/', juegoController.getAll);
 
+//GET - http://localhost/juego/habilitado
+juegoRouter.get('/habilitado', juegoController.getAllowed);
+
 //GET - http://localhost/juego/:id
 juegoRouter.get('/:id', juegoController.getById);
 
