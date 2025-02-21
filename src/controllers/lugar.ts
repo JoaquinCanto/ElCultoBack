@@ -23,6 +23,29 @@ const lugarController = {
 		}
 	},
 
+	// Obtener todos los lugares habilitados
+	getAllowed: async (_req: Request, res: Response) => {
+		try {
+			const lugaresHabilitados: Lugar[] = await prisma.lugar.findMany({
+				where: {
+					estado: true
+				}
+			});
+			return res.status(200).json({
+				status: 200,
+				total: lugaresHabilitados.length,
+				items: lugaresHabilitados,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Obtener un lugar por id
 	getById: async (_req: Request, res: Response) => {
 		try {

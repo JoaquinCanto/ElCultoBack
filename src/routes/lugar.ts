@@ -7,6 +7,9 @@ const lugarRouter = Router();
 //GET - http://localhost/lugar
 lugarRouter.get('/', lugarController.getAll);
 
+//GET - http://localhost/lugar/habilitado
+lugarRouter.get('/habilitado', lugarController.getAllowed);
+
 //GET - http://localhost/lugar/:id
 lugarRouter.get('/:id', lugarController.getById);
 
