@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 // Rutas de la app
-app.use('', router);
+app.use('/', router);
 
 app.get('/', (req, res) => {
 	res.status(200).send({
