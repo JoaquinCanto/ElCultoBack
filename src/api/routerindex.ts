@@ -1,10 +1,10 @@
 import { Router } from "express";
-import juegoRouter from "./juego";
-import lugarRouter from "./lugar";
-import personaRouter from "./persona";
-import mesaController from "./mesa";
-import inscripcionController from "./inscripcion";
-import sugerenciaController from "./sugerencia";
+import juegoRouter from "../routes/juego";
+import lugarRouter from "../routes/lugar";
+import personaRouter from "../routes/persona";
+import mesaController from "../routes/mesa";
+import inscripcionController from "../routes/inscripcion";
+import sugerenciaController from "../routes/sugerencia";
 
 const router = Router();
 
