@@ -80,7 +80,7 @@ model Sugerencia {
     juego           Juego    @relation(fields: [idJuego], references: [idJuego])
     idJuego         Int
     fechaSugerencia DateTime @default(now())
-    vieja           Boolean
+    vieja           Boolean  @default(false)
 }
 
 model Inscripcion {
