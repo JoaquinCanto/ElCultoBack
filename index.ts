@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import app from "./src/app";
 import config from './src/config';
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const prisma = new PrismaClient();
 
 if (!config.PostgreSQLDB_URL) {
