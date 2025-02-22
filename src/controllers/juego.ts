@@ -46,6 +46,49 @@ const juegoController = {
 		}
 	},
 
+	//Obtener los 10 juegos más jugados
+	getTopPlayedGames: async (_req: Request, res: Response) => {
+		try {
+			// Raw SQL query: join Inscripcion and Mesa to group by idJuego and count inscriptions
+			const topGames = await prisma.$queryRaw<
+				{ idJuego: number; inscriptionCount: string }[]
+			>`
+			SELECT m."idJuego", COUNT(*) as "inscriptionCount"
+			FROM "Inscripcion" i
+			INNER JOIN "Mesa" m ON i."idMesa" = m."idMesa"
+			GROUP BY m."idJuego"
+			ORDER BY "inscriptionCount" DESC
+			LIMIT 10;`
+				;
+
+			// Fetch full game details for each group
+			const topGamesDetailed = await Promise.all(
+				topGames.map(async (group) => {
+					const juego = await prisma.juego.findUnique({
+						where: { idJuego: group.idJuego },
+					});
+					return {
+						nombre: juego!.nombre,
+						cantidadInscripciones: parseInt(group.inscriptionCount, 10), // number of inscriptions
+					};
+				})
+			);
+
+			return res.status(200).json({
+				status: 200,
+				total: topGamesDetailed.length,
+				items: topGamesDetailed,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(500).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Obtener un juego por id
 	getById: async (_req: Request, res: Response) => {
 		try {

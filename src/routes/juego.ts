@@ -10,6 +10,9 @@ juegoRouter.get('/', juegoController.getAll);
 //GET - http://localhost/juego/habilitado
 juegoRouter.get('/habilitado', juegoController.getAllowed);
 
+//GET - http://localhost/juego/top
+juegoRouter.get('/top', juegoController.getTopPlayedGames);
+
 //GET - http://localhost/juego/:id
 juegoRouter.get('/:id', juegoController.getById);
 
