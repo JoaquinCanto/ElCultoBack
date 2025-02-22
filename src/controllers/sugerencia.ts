@@ -7,7 +7,12 @@ const sugerenciaController = {
 	// Obtener todos las sugerencias
 	getAll: async (_req: Request, res: Response) => {
 		try {
-			const allSugerencias: Sugerencia[] = await prisma.sugerencia.findMany();
+			const allSugerencias: Sugerencia[] = await prisma.sugerencia.findMany({
+				include: {
+					juego: true,
+					persona: true,
+				}
+			});
 			return res.status(200).json({
 				status: 200,
 				total: allSugerencias.length,
@@ -23,11 +28,53 @@ const sugerenciaController = {
 		}
 	},
 
+	getRelevant: async (_req: Request, res: Response) => {
+		try {
+			const topGames = await prisma.sugerencia.groupBy({
+				by: ['idJuego'],
+				where: { vieja: false },
+				_count: { idJuego: true },
+				orderBy: { _count: { idJuego: 'desc' } },
+				take: 10,
+
+			});
+			const topGamesWithDetails = await Promise.all(
+				topGames.map(async (group) => {
+					const juego = await prisma.juego.findUnique({
+						where: { idJuego: group.idJuego },
+					});
+					return {
+						juego: juego!.nombre,
+						cantidad: group._count.idJuego,
+					};
+				})
+			);
+			return res.status(200).json({
+				status: 200,
+				total: topGamesWithDetails.length,
+				items: topGamesWithDetails,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.status(204).json({
+					message: error.message,
+					error: true,
+				});
+			}
+		}
+	},
+
 	//Obtener una sugerencia por id
 	getById: async (_req: Request, res: Response) => {
 		try {
 			const id = parseInt(_req.params.id);
-			const idSugerencia: Sugerencia | null = await prisma.sugerencia.findUnique({ where: { idSugerencia: Number(id) } });
+			const idSugerencia: Sugerencia | null = await prisma.sugerencia.findUnique({
+				where: { idSugerencia: Number(id) },
+				include: {
+					juego: true,
+					persona: true,
+				}
+			});
 			return res.status(200).json({
 				status: 200,
 				items: idSugerencia,

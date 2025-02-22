@@ -7,6 +7,9 @@ const sugerenciaRouter = Router();
 //GET - http://localhost/sugerencia
 sugerenciaRouter.get('/', sugerenciaController.getAll);
 
+//GET - http://localhost/sugerencia/relevante
+sugerenciaRouter.get('/relevante', sugerenciaController.getRelevant);
+
 //GET - http://localhost/sugerencia/:id
 sugerenciaRouter.get('/:id', sugerenciaController.getById);
 
