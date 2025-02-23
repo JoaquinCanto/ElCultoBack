@@ -7,11 +7,11 @@ const personaRouter = Router();
 //GET - http://localhost/persona
 personaRouter.get('/', personaController.getAll);
 
-//GET - http://localhost/persona/:id
-personaRouter.get('/:id', personaController.getById);
-
 //GET - http://localhost/persona/email/:email
 personaRouter.get('/email/:email', personaController.getByEmail);
+
+//GET - http://localhost/persona/:id
+personaRouter.get('/:id', personaController.getById);
 
 //POST - http://localhost/persona
 personaRouter.post('/', personaController.create);
