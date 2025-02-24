@@ -56,10 +56,11 @@ const juegoController = {
 			SELECT m."idJuego", COUNT(*) as "inscriptionCount"
 			FROM "Inscripcion" i
 			INNER JOIN "Mesa" m ON i."idMesa" = m."idMesa"
+			WHERE i."baja" = false
 			GROUP BY m."idJuego"
 			ORDER BY "inscriptionCount" DESC
-			LIMIT 10;`
-				;
+			LIMIT 10;
+			`;
 
 			// Fetch full game details for each group
 			const topGamesDetailed = await Promise.all(
