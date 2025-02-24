@@ -7,7 +7,37 @@ const inscripcionController = {
 	// Obtener todos las inscripciones
 	getAll: async (_req: Request, res: Response) => {
 		try {
-			const allinscripciones: Inscripcion[] = await prisma.inscripcion.findMany();
+			const allinscripciones: Inscripcion[] = await prisma.inscripcion.findMany({
+				include: {
+					jugador: {
+						select: {
+							apodo: true,
+						},
+					},
+					mesa: {
+						include: {
+							juego: {
+								select: {
+									nombre: true,
+									descripcion: true
+								},
+							},
+							narrador: {
+								select: {
+									apodo: true,
+								},
+							},
+							lugar: {
+								select: {
+									nombre: true,
+									direccion: true
+								}
+							}
+						},
+					},
+				},
+
+			});
 			return res.status(200).json({
 				status: 200,
 				total: allinscripciones.length,
@@ -49,6 +79,11 @@ const inscripcionController = {
 			const inscripciones: Inscripcion[] | null = await prisma.inscripcion.findMany({
 				where: { idJugador: Number(idJugador), baja: false },
 				include: {
+					jugador: {
+						select: {
+							apodo: true,
+						},
+					},
 					mesa: {
 						include: {
 							juego: {
@@ -71,8 +106,7 @@ const inscripcionController = {
 						},
 					},
 				},
-			}
-			)
+			})
 			return res.status(200).json({
 				status: 200,
 				items: inscripciones,
