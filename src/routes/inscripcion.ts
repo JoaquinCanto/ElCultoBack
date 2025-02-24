@@ -11,7 +11,7 @@ inscripcionRouter.get('/', inscripcionController.getAll);
 inscripcionRouter.get('/:id', inscripcionController.getById);
 
 //GET - http://localhost/inscripcion/jugador/:id
-inscripcionRouter.get('/jugador/:id', inscripcionController.getAllPlayerByPlayerId);
+inscripcionRouter.get('/jugador/:id', inscripcionController.getAllInscriptionsByPlayerId);
 
 //POST - http://localhost/inscripcion
 inscripcionRouter.post('/', inscripcionController.create);

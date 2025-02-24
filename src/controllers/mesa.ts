@@ -13,6 +13,9 @@ const mesaController = {
 					lugar: true,
 					narrador: true,
 					jugadores: { // Incluye las inscripciones
+						where: {
+							baja: false
+						},
 						include: {
 							jugador: { // Detalles del jugador inscrito
 								select: {

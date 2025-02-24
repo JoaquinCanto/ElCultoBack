@@ -43,7 +43,7 @@ const inscripcionController = {
 	},
 
 	//Obtener todas las inscripciones habilitadas de un solo jugador por su id
-	getAllPlayerByPlayerId: async (_req: Request, res: Response) => {
+	getAllInscriptionsByPlayerId: async (_req: Request, res: Response) => {
 		try {
 			const idJugador = parseInt(_req.params.id);
 			const inscripciones: Inscripcion[] | null = await prisma.inscripcion.findMany({
