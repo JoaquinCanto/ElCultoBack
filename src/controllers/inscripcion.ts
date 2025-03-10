@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { PrismaClient, Inscripcion } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Inscripcion } from "@prisma/client";
+import { prisma } from "../middlewares/inscripcion";
 
 const inscripcionController = {
 	// Obtener todos las inscripciones
